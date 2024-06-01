@@ -3,6 +3,7 @@ pipeline{
     stages {
         stage('Build') {
             steps{
+                docker buildx build .
                 sh 'mvn -B -DskipTests clean package'
             }
         }
