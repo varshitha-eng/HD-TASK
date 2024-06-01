@@ -1,27 +1,51 @@
 pipeline {
     agent any
-    options {
-        skipStagesAfterUnstable()
-    }
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                script {
+                    bat 'mvn clean package'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+                script {
+                    bat 'mvn test'
                 }
             }
         }
-        stage('Deliver') { 
+        stage('Code Quality Analysis') {
             steps {
-                sh './jenkins/scripts/deliver.sh' 
+                script {
+                    bat 'mvn sonar:sonar'
+                }
+            }
+        }
+        stage('Deploy to Test') {
+            steps {
+                script {
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
+        stage('Release to Production') {
+            steps {
+                script {
+                    bat 'docker-compose -f docker-compose-prod.yml up -d'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                bat 'docker-compose down'
             }
         }
     }
