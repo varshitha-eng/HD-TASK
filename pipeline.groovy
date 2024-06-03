@@ -56,8 +56,15 @@ pipeline {
         stage('Release to Production') {
             steps {
                 script {
+                    echo 'Release to Production...'
                     bat 'docker-compose -f docker-compose.production.yml up -d'
                 }
+            }
+        }
+        stage {
+            steps{
+                echo 'Monitoring and Akerting...'
+                sh 'docker logs <container_id> | grep newrelic'
             }
         }
     }
