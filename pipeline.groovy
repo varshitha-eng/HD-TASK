@@ -26,7 +26,9 @@ pipeline {
         stage('Code Quality Analysis') {
             steps {
                 script {
-                    bat 'mvn sonar:sonar'
+                    withSonarQubeEnv('Sonar Qube'){
+                        bat 'mvn package sonar:sonar'
+                    }
                 }
             }
         }
