@@ -35,7 +35,7 @@ pipeline {
         stage('Docker Image'){
             steps{
                 script{
-                    docker.build(DOCKER_IMAGE)
+                    bat 'docker build -t my-web-app:latest .'
                 }
             }
         }
