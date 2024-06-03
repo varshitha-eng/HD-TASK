@@ -32,6 +32,13 @@ pipeline {
                 }
             }
         }
+        stage('Docker Image'){
+            steps{
+                script{
+                    docker.build(DOCKER_IMAGE)
+                }
+            }
+        }
         stage('Release to Production') {
             steps {
                 script {
