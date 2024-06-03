@@ -56,10 +56,9 @@ pipeline {
                     input 'Promote to production?'
                     echo 'Releasing to Production...'
                     sh 'docker-compose -f docker-compose.yml up -d'
-                
-            }
+                }
         }
-    }
+    
     post {
         always {
             echo 'Cleaning up...'
