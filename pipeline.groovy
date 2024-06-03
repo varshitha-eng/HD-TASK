@@ -45,18 +45,32 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Staging'){
+            steps{
+                echo 'Deploy to Staging...'
+                sh 'docker-compose -f docker-compose.staging.yml up -d'
+            }
+        }
         stage('Release to Production') {
             steps {
                 script {
-                    bat 'docker-compose -f docker-compose-prod.yml up -d'
+                    input 'Promote to production?'
+                    echo 'Releasing to Production...'
+                    sh 'docker-compose -f docker-compose.production.yml up -d'
                 }
             }
         }
     }
     post {
         always {
-            script {
-                bat 'docker-compose down'
+            echo 'Cleaning up...'
+            sh 'docker-compose down'
+            success{
+                echo 'Pipeline completed successfully'
+            }
+            failure{
+                echo 'Pipeline failed'
+            }
             }
         }
     }
