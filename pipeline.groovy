@@ -21,13 +21,16 @@ pipeline {
         stage('Test') {
             steps {
                 script {
+                    echo 'Testing...'
                     bat 'mvn test'
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
         stage('Code Quality Analysis') {
             steps {
                 script {
+                    echo 'Code Quality Analysis...'
                     withSonarQubeEnv('SonarQube'){
                         bat 'mvn package sonar:sonar'
                     }
@@ -37,7 +40,8 @@ pipeline {
         stage('Docker Image'){
             steps{
                 script{
-                    bat 'docker build -t my-web-app:latest .'
+                    echo 'Building Docker Image...'
+                    def dockerImage = docker.build("my-web-app:${env.BUILD_ID}")
                 }
             }
         }
