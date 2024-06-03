@@ -32,21 +32,6 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build(DOCKER_IMAGE)
-                }
-            }
-        }
-        stage('Deploy to Test') {
-            steps {
-                script {
-                    docker.image(DOCKER_IMAGE).inside {
-                        sh "docker run -d -p 8080:8080 ${DOCKER_IMAGE}"
-                }
-            }
-        }
         stage('Release to Production') {
             steps {
                 script {
