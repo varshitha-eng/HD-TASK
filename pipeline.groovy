@@ -64,7 +64,8 @@ pipeline {
         stage ('Monitoring and Alerting'){
             steps{
                 echo 'Monitoring and Akerting...'
-                sh 'docker logs d0924ab5421d | grep newrelic'
+                def containerId = sh(script: "docker ps --filter 'name=my-web-app' --format '{{.ID}}'", returnStdout: true).trim()
+                sh 'docker logs <containerID> | grep newrelic'
             }
         }
     }
