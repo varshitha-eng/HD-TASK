@@ -1,4 +1,22 @@
-FROM openjdk:17
-COPY target/my-app.jar my-app.jar
-ENTRYPOINT ["java", "-jar", "my-app.jar"]
+# Jenkins JDK 17, JDK 11 is being deprecated
+FROM jenkins/jenkins:latest-jdk17
 
+USER root
+
+RUN apt-get update && apt-get install -y lsb-release
+
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+
+RUN apt-get update && apt-get install -y docker-ce-cli
+
+RUN apt update && apt install tzdata -y
+
+ENV TZ="Australia"
+
+USER jenkins
