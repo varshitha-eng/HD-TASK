@@ -17,16 +17,6 @@ RUN apt-get update && apt-get install -y docker-ce-cli
 
 RUN apt update && apt install tzdata -y
 
-# Add New Relic setup
-RUN curl -L https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip -o newrelic-java.zip && \
-    unzip newrelic-java.zip -d /opt && \
-    rm newrelic-java.zip
-
-ENV NEW_RELIC_APP_NAME="my-web-app"
-ENV NEW_RELIC_LICENSE_KEY="NRAK-PISXGOL969BED7QOYP9S7VYRV0Q"
-
-CMD ["java", "-javaagent:/opt/newrelic/newrelic.jar", "-jar", "my-app-1.0-SNAPSHOT.jar"]
-
 
 ENV TZ="Australia"
 
