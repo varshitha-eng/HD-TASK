@@ -48,7 +48,7 @@ pipeline {
         stage('Release to Production') {
             steps {
                 script {
-                    bat 'docker-compose -f docker-compose-prod.yml up -d'
+                    bat 'docker-compose -f docker-compose.production.yml up -d'
                 }
             }
         }
