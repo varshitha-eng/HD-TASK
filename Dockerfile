@@ -22,7 +22,7 @@ RUN curl -L https://download.newrelic.com/newrelic/java-agent/newrelic-agent/cur
     unzip newrelic-java.zip -d /opt && \
     rm newrelic-java.zip
 
-ENV NEW_RELIC_APP_NAME="YourAppName"
+ENV NEW_RELIC_APP_NAME="my-web-app"
 ENV NEW_RELIC_LICENSE_KEY="NRAK-PISXGOL969BED7QOYP9S7VYRV0Q"
 
 CMD ["java", "-javaagent:/opt/newrelic/newrelic.jar", "-jar", "your-app.jar"]
