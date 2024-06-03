@@ -45,6 +45,12 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Staging'){
+           steps {
+                echo 'Deploying to Staging...'
+                sh 'docker-compose -f docker-compose.staging.yml up -d'
+            } 
+        }
         stage('Release to Production') {
             steps {
                 script {
