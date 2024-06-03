@@ -64,7 +64,7 @@ pipeline {
         stage ('Monitoring and Alerting'){
             steps{
                 echo 'Monitoring and Akerting...'
-                sh 'docker logs <container_id> | grep newrelic'
+                sh 'docker logs d0924ab5421d | grep newrelic'
             }
         }
     }
