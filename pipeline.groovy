@@ -66,7 +66,7 @@ pipeline {
                 echo 'Monitoring and Akerting...'
                 script{
                    def containerId = sh(script: "docker ps --filter 'name=my-web-app' --format '{{.ID}}'", returnStdout: true).trim()
-                    sh 'docker logs <containerID> | grep newrelic' 
+                    sh 'docker logs containerID | grep newrelic' 
                 }
             }
         }
