@@ -12,7 +12,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    echo 'Building...'
                     bat 'mvn clean package'
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
                 }
             }
         }
