@@ -61,12 +61,6 @@ pipeline {
                 }
             }
         }
-        stage {
-            steps{
-                echo 'Monitoring and Akerting...'
-                sh 'docker logs <container_id> | grep newrelic'
-            }
-        }
     }
     post {
         always {
