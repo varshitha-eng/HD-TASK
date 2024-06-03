@@ -1,6 +1,8 @@
 version: '3'
 services:
   web:
-    image: my-web-app:${BUILD_ID}
+    image: my-web-app:latest
     ports:
       - "8080:8080"
+    environment:
+      - ENVIRONMENT=production
