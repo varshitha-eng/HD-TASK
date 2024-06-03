@@ -39,38 +39,26 @@ pipeline {
         }
         stage('Docker Image'){
             steps{
+                echo 'Building Docker Image...'
                 script{
-                    echo 'Building Docker Image...'
                     def dockerImage = docker.build("my-web-app:${env.BUILD_ID}")
                 }
             }
         }
-        stage('Deploy to Staging'){
-            steps{
-                echo 'Deploy to Staging...'
-                sh 'docker-compose -f docker-compose.staging.yml up -d'
-            }
-        }
         stage('Release to Production') {
             steps {
-                    input 'Promote to production?'
-                    echo 'Releasing to Production...'
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                script {
+                    bat 'docker-compose -f docker-compose-prod.yml up -d'
                 }
+            }
         }
-    
+    }
     post {
         always {
-            echo 'Cleaning up...'
-            sh 'docker-compose down'
-            success{
-                echo 'Pipeline completed successfully'
-            }
-            failure{
-                echo 'Pipeline failed'
-            
+            script {
+                bat 'docker-compose down'
             }
         }
     }
 }
-}
+
