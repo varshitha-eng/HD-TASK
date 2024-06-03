@@ -4,3 +4,5 @@ services:
     image: my-web-app:${BUILD_ID}
     ports:
       - "8082:8080"
+    environment:
+      - ENVIRONMENT=production
