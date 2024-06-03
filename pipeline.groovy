@@ -1,57 +1,65 @@
 pipeline {
     agent any
-    tools{
-        maven '3.9.7'
-    }
+
     stages {
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
-                script {
-                    bat 'mvn clean package'
-                }
+                echo 'Building...'
+                sh 'mvn clean package'
+                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
             }
         }
         stage('Test') {
             steps {
-                script {
-                    bat 'mvn test'
-                }
+                echo 'Testing...'
+                sh 'mvn test'
+                junit '**/target/surefire-reports/*.xml'
             }
         }
         stage('Code Quality Analysis') {
             steps {
+                echo 'Code Quality Analysis...'
+                sh 'mvn sonar:sonar'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker Image...'
                 script {
-                    withSonarQubeEnv('SonarQube'){
-                        bat 'mvn package sonar:sonar'
-                    }
+                    def dockerImage = docker.build("my-web-app:${env.BUILD_ID}")
                 }
             }
         }
-        stage('Docker Image'){
-            steps{
-                script{
-                    bat 'docker build -t my-web-app:latest .'
-                }
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying to Staging...'
+                sh 'docker-compose -f docker-compose.staging.yml up -d'
             }
         }
         stage('Release to Production') {
             steps {
-                script {
-                    bat 'docker-compose -f docker-compose-prod.yml up -d'
-                }
+                input 'Promote to production?'
+                echo 'Releasing to Production...'
+                sh 'docker-compose -f docker-compose.production.yml up -d'
+            }
+        }
+        stage('Monitoring and Alerting') {
+            steps {
+                echo 'Monitoring and Alerting...'
+                // Configuration for monitoring tools like Datadog/New Relic
             }
         }
     }
     post {
         always {
-            script {
-                bat 'docker-compose down'
-            }
+            echo 'Cleaning up...'
+            sh 'docker-compose down'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
