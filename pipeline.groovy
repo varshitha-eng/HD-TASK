@@ -66,7 +66,9 @@ pipeline {
         always {
             junit '**/target/surefire-reports/*.xml'
             echo 'Cleaning up...'
-            sh 'docker-compose down'
+            script{
+                bat 'docker-compose down'
+            }
         }
     }
 }
