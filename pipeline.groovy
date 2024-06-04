@@ -64,16 +64,10 @@ pipeline {
     }
     post {
         always {
+            junit '**/target/surefire-reports/*.xml'
             echo 'Cleaning up...'
             sh 'docker-compose down'
         }
-        success {
-            echo 'Pipeline completed successfully!!!'
-        }
-        failure{
-            echo 'Pipeline completed with errors'
-        }
-        
     }
 }
 
