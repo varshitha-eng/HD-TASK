@@ -73,7 +73,7 @@ pipeline {
         failure{
             echo 'Pipeline completed with errors'
         }
-        }
+        
     }
 }
 
