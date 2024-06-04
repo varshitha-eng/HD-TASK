@@ -66,7 +66,7 @@ pipeline {
         always {
             echo 'Cleaning up...'
             sh 'docker-compose down'
-            }
+        }
         success {
             echo 'Pipeline completed successfully!!!'
         }
