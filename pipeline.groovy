@@ -64,9 +64,15 @@ pipeline {
     }
     post {
         always {
-            script {
-                bat 'docker-compose down'
+            echo 'Cleaning up...'
+            sh 'docker-compose down'
             }
+        success {
+            echo 'Pipeline completed successfully!!!'
+        }
+        failure{
+            echo 'Pipeline completed with errors'
+        }
         }
     }
 }
